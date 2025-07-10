@@ -50,49 +50,52 @@ const EmpGrowth = () => {
         </motion.div>
 
         {/* Timeline */}
-        <motion.div
-          className="w-full px-2"
-          initial={{ scale: 0.95, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ delay: 0.5, duration: 0.7 }}
-        >
-          <div className="flex justify-center items-center gap-4 p-4 rounded-3xl flex-wrap sm:flex-nowrap">
-            {months.map((month, idx) => (
-              <motion.div
-                key={idx}
-                className="relative px-4 py-6 w-[100px] backdrop-blur-md border-2 rounded-xl transition-transform duration-300 hover:scale-105"
-                whileHover={{ scale: 1.05 }}
-                initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2 + idx * 0.15 }}
-                style={{
-                  borderImage:
-                    "linear-gradient(90deg, #956D13, #FFD87C, #E6BE69, #FFEC94, #D3A84C, #A47A1E) 1",
-                  borderImageSlice: 1,
-                  boxShadow:
-                    "0 0 10px rgba(255, 215, 0, 0.2), 0 0 20px rgba(255, 215, 0, 0.08)",
-                }}
-              >
-                <div className="text-[#C0C0C0] font-serif font-extrabold uppercase text-xs text-center space-y-1">
-                  <p>{month.label.split(" ")[0]}</p>
-                  <p>{month.label.split(" ")[1]}</p>
-                </div>
-                <div
-                  className="mt-2 h-[2px] w-6 mx-auto rounded-full"
-                  style={{
-                    background: "linear-gradient(to right, #FFD87C, #E6BE69, #FFEC94)",
-                    boxShadow: "0 0 4px #ffd700cc",
-                  }}
-                ></div>
-                {idx < months.length - 1 && (
-                  <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden sm:block">
-                    <p className="text-yellow-400 text-lg font-bold">↠</p>
-                  </div>
-                )}
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
+        {months.map((month, idx) => {
+  // Progressive glow intensity
+  const shadowStrength = 0.2 + idx * 0.1;
+  const boxShadow = `0 0 10px rgba(255,215,0,${shadowStrength}), 0 0 20px rgba(255,215,0,${shadowStrength / 2})`;
+  const hoverScale = 1.03 + idx * 0.01; // increase scale slightly each month
+
+  return (
+    <motion.div
+      key={idx}
+      className="relative px-4 py-6 w-[100px] backdrop-blur-md border-2 rounded-2xl transition-transform duration-300"
+      whileHover={{ scale: hoverScale }}
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ delay: 0.2 + idx * 0.15 }}
+      style={{
+        borderImage:
+          "linear-gradient(90deg, #956D13, #FFD87C, #E6BE69, #FFEC94, #D3A84C, #A47A1E) 1",
+        borderImageSlice: 1,
+        boxShadow,
+      }}
+    >
+      {/* Month Text */}
+      <div className="text-[#C0C0C0] font-serif font-extrabold uppercase text-xs text-center space-y-1">
+        <p>{month.label.split(" ")[0]}</p>
+        <p>{month.label.split(" ")[1]}</p>
+      </div>
+
+      {/* Divider Line */}
+      <div
+        className="mt-2 h-[2px] w-6 mx-auto rounded-full"
+        style={{
+          background: "linear-gradient(to right, #FFD87C, #E6BE69, #FFEC94)",
+          boxShadow: `0 0 4px rgba(255,215,0,${shadowStrength})`,
+        }}
+      ></div>
+
+      {/* Arrow */}
+      {idx < months.length - 1 && (
+        <div className="absolute -right-4 top-1/2 transform -translate-y-1/2 hidden sm:block">
+          <p className="text-yellow-400 text-lg font-bold">↠</p>
+        </div>
+      )}
+    </motion.div>
+  );
+})}
+
 
         {/* Co-Founder */}
         <motion.div
