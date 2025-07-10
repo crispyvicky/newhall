@@ -6,10 +6,10 @@ import { motion } from "framer-motion";
 import dynamic from "next/dynamic";
 import IMAGE from "../Utils/images";
 
-// Dynamically import ApexCharts (no SSR)
+// Dynamically import ApexCharts to disable SSR
 const Chart = dynamic(() => import("react-apexcharts"), { ssr: false });
 
-// Data with charts included
+// Data
 const RANKINGS = [
   {
     title: "CB RANKING",
@@ -61,7 +61,7 @@ const GlobalRanking = () => {
     <section className="w-11/12 max-w-7xl mx-auto py-16 text-center text-white">
       {/* Title */}
       <motion.h2
-        className="text-3xl sm:text-4xl font-extrabold tracking-wider  uppercase 
+        className="text-3xl sm:text-4xl font-extrabold tracking-wider uppercase 
                    bg-gradient-to-r from-[#956D13] via-[#FFD87C] to-[#A47A1E] 
                    bg-clip-text text-transparent font-[Poppins] mb-10"
         initial={{ opacity: 0, y: -20 }}
@@ -93,39 +93,59 @@ const GlobalRanking = () => {
             <img
               src={rank.logo}
               alt={rank.title}
-              className="w-10 h-10 mx-auto rounded mb-3 drop-shadow"
+              className="w-10 h-10 mx-auto rounded-xl mb-3 drop-shadow"
               loading="lazy"
             />
 
-            {/* Apex Chart */}
+            {/* Apex Line Chart */}
             <Chart
-  options={{
-    chart: {
-      id: `${rank.title}-barchart`,
-      toolbar: { show: false },
-      sparkline: { enabled: true },
-    },
-    plotOptions: {
-      bar: {
-        borderRadius: 4,
-        columnWidth: "50%",
-        distributed: true,
-      },
-    },
-    colors: ["#FFD87C", "#E6BE69", "#D4AF37", "#A47A1E"],
-    xaxis: {
-      categories: rank.categories,
-      labels: { show: false },
-    },
-    yaxis: { show: false },
-    tooltip: { enabled: false },
-    grid: { show: false },
-  }}
-  series={rank.series}
-  type="bar"
-  height={120}
-/>
-
+              options={{
+                chart: {
+                  type: "line",
+                  toolbar: { show: false },
+                  zoom: { enabled: false },
+                },
+                stroke: {
+                  curve: "smooth",
+                  width: 2,
+                  colors: ["#FFD700"],
+                },
+                markers: {
+                  size: 5,
+                  colors: ["#FFD87C"],
+                  strokeColors: "#A47A1E",
+                  strokeWidth: 2,
+                },
+                xaxis: {
+                  categories: rank.categories,
+                  labels: {
+                    style: {
+                      colors: "#CCCCCC",
+                      fontSize: "10px",
+                      fontFamily: "Poppins",
+                    },
+                  },
+                },
+                yaxis: {
+                  labels: {
+                    style: {
+                      colors: "#CCCCCC",
+                      fontSize: "10px",
+                      fontFamily: "Poppins",
+                    },
+                  },
+                },
+                tooltip: {
+                  theme: "dark",
+                },
+                grid: {
+                  borderColor: "rgba(255, 255, 255, 0.1)",
+                },
+              }}
+              series={rank.series}
+              type="line"
+              height={140}
+            />
 
             {/* Title */}
             <p
